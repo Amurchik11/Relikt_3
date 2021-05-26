@@ -1,0 +1,54 @@
+ReflectionIT.Mvc.Paging
+
+@section scripts
+{
+    <script type="text/javascript">
+        function Init() {
+             $("a[href$='#']").html("Перейти в начало").addClass('btn btn-primary papage-link');
+      }
+      $(function () {
+          Init();
+
+      });
+    </script>
+}
+
+var model = await PagingList.CreateAsync(doors, 8, page);
+
+using ReflectionIT.Mvc.Paging;
+
+
+@model ReflectionIT.Mvc.Paging.PagingList<DoorsShop.Data.Models.Door>
+@using ReflectionIT.Mvc.Paging
+@*@addTagHelper *, ReflectionIT.Mvc.Paging*@
+
+<nav aria-label="Suppliers navigation example">
+    @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+</nav>
+
+<h1>@ViewBag.currCategory</h1>
+<div class="row mt-5 mb-2">
+    @{
+        foreach (Door door in Model)
+        {
+            @Html.Partial("AllDoors", door)
+        }
+
+    }
+</div>
+
+@*<nav aria-label="Suppliers navigation example">
+    <vc:pager paging-list="@Model" />
+</nav>*@
+@section scripts
+{
+  <script type="text/javascript">
+      function Init() {
+          $("a[href$='#']").html("Перейти в начало").addClass('btn btn-primary papage-link');
+      }
+      $(function () {
+          Init();
+
+      });
+  </script>
+}

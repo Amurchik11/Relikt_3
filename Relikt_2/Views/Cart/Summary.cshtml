@@ -1,0 +1,394 @@
+﻿@model Relikt_2_Models.ViewModels.ProductUserVM
+@using Relikt_2_Utility
+@using System.Web;
+
+
+
+
+<form method="post" id="payment-form">
+    <input asp-for="OrderHeader.Id" type="hidden" />
+    <br />
+    <div class="backgroundWhiteBorder">
+        <div class="container">
+            <div class="card">
+                <div class="card-header bg-dark text-light ml-0 row container">
+                    <div class="col-6">
+                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                        Итоговый Счёт
+                    </div>
+                    <div class="col-6 text-right">
+                        <a class="btn btn-outline-info btn-sm" asp-action="Index">Назад в Корзину</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container rounded p-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-7 pb-4">
+                                <div class="row">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Данные Покупателя:</span>
+                                    </h4>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Имя</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input asp-for="ApplicationUser.FullName" type="text" class="form-control" />
+
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Телефон</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input asp-for="ApplicationUser.PhoneNumber" required type="text" class="form-control" />
+
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input asp-for="ApplicationUser.Email" required type="text" class="form-control" />
+
+                                    </div>
+                                </div>
+                                @if (User.IsInRole(Relikt_2_Utility.WC.AdminRole) || User.IsInRole(Relikt_2_Utility.WC.CustomerRole))
+                                {
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Номер отделения Новой Почты, номер дома</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="ApplicationUser.PostalCode" required type="text" class="form-control" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Улица проживания, или Новой Почты</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="ApplicationUser.StreetAddress" required type="text" class="form-control" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Город, населенный пункт</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="ApplicationUser.City" required type="text" class="form-control" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Область</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="ApplicationUser.Region" required type="text" class="form-control" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Дополнительные инструкции: </label>
+                                        </div>
+
+                                        <div class="col-8">
+                                            <textarea asp-for="OrderHeader.Comments" style="height:100px;" class="form-control"></textarea>
+                                        </div>
+
+                                    </div>
+
+
+                                }
+                            </div>
+                            <div class="col-12 col-lg-5 row">
+                                <div class="col-12">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Итог Заказа:</span>
+                                    </h4>
+
+                                    @*<a asp-action="ExcelDownload" class="btn btn-success">Сохранить заказ как Exel файл</a>*@
+                                    <ul class="list-group mb-3">
+                                        @{ var orderTotal = 0.0;}
+                                        @for (int i = 0; i < Model.ProductList.Count(); i++)
+                                        {
+                                            <li hidden>
+                                                <input type="hidden" asp-for="@Model.ProductList[i].Id" />
+                                                <input type="hidden" asp-for="@Model.ProductList[i].Name" />
+                                                <input type="hidden" asp-for="@Model.ProductList[i].ApplicationTypeId" />
+                                                <input type="hidden" asp-for="@Model.ProductList[i].ApplicationType.Name" />
+                                                <input type="hidden" asp-for="@Model.ProductList[i].CategoryId" />
+                                                <input type="hidden" asp-for="@Model.ProductList[i].Category.Name" />
+                                                <input type="hidden" asp-for="@Model.ProductList[i].SizeTypeId" />
+                                                <input type="hidden" asp-for="@Model.ProductList[i].SizeType.Name" />
+
+                                                @if (@Model.ProductList[i].RightLeft != null)
+                                                {
+                                                    <input type="hidden" asp-for="@Model.ProductList[i].RightLeftId" />
+                                                    <input type="hidden" asp-for="@Model.ProductList[i].RightLeft.Name" />
+                                                }
+                                                @if (@Model.ProductList[i].ColourOfGlass != null)
+                                                {
+                                                    <input type="hidden" asp-for="@Model.ProductList[i].ColourOfGlassId" />
+                                                    <input type="hidden" asp-for="@Model.ProductList[i].ColourOfGlass.Name" />
+                                                }
+
+                                                <input type="hidden" asp-for="@Model.ProductList[i].Price" />
+                                                <input type="hidden" asp-for="@Model.ProductList[i].TempCount" />
+                                            </li>
+
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <div>
+                                                    <h6 class="my-0 text-info">@Model.ProductList[i].ApplicationType.Name</h6>
+                                                    <h6 class="my-0 text-info">@Model.ProductList[i].Name</h6>
+                                                    <h6 class="my-0 text-info">@Model.ProductList[i].Category.Name</h6>
+                                                    <h6 class="my-0 text-info">@Model.ProductList[i].SizeType.Name</h6>
+                                                    @if (@Model.ProductList[i].RightLeft != null)
+                                                    {
+                                                        <h6 class="my-0 text-info">@Model.ProductList[i].RightLeft?.Name</h6>
+                                                    }
+                                                    @if (@Model.ProductList[i].ColourOfGlass != null)
+                                                    {
+                                                        <h6 class="my-0 text-info">@Model.ProductList[i].ColourOfGlass?.Name</h6>
+                                                    }
+
+                                                    @if (User.IsInRole(Relikt_2_Utility.WC.AdminRole) || User.IsInRole(Relikt_2_Utility.WC.CustomerRole))
+                                                    {
+                                                        <small class="text-muted">Количество: @Model.ProductList[i].TempCount шт.</small>
+                                                        <br />
+                                                        <small class="text-muted">Цена за единицу: @Model.ProductList[i].Price.ToString("0.00") грн.</small>
+                                                    }
+                                                    else
+                                                    {
+
+                                                    }
+                                                    @*<h5 class="text-muted" style="background-color:gold">  @Model.ProductList[i].Price.ToString("0.00") грн.</h5>*@
+                                                </div>
+                                                @if (User.IsInRole(Relikt_2_Utility.WC.AdminRole) || User.IsInRole(Relikt_2_Utility.WC.CustomerRole))
+                                                {
+
+                                                    <span class="text-muted">@(Model.ProductList[i].Price * Model.ProductList[i].TempCount) грн.</span>
+                                                }
+                                            </li>
+                                            orderTotal += Model.ProductList[i].Price * Model.ProductList[i].TempCount;
+
+                                        }
+                                        @if (User.IsInRole(Relikt_2_Utility.WC.AdminRole) || User.IsInRole(Relikt_2_Utility.WC.CustomerRole))
+                                        {
+
+                                            <li class="list-group-item d-flex justify-content-between bg-light">
+                                                <small class="text-info"> Сумма заказа (грн.) </small>
+                                                <strong class="text-muted">
+                                                    @orderTotal
+
+                                                </strong>
+
+                                            </li>
+
+                                            @if (Model.Coupon != null)
+                                            {
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    <div class="text-success">
+                                                        <h6 class="my-0">Скидка составила: </h6>
+
+                                                    </div>
+                                                    <span class="text-success"> @(orderTotal * Model.Coupon.Discount / 100) грн.</span>
+
+                                                </li>
+                                            }
+
+                                            <li class="list-group-item d-flex justify-content-between bg-light">
+                                                <small class="text-info"> ИТОГО К ОПЛАТЕ (грн.) </small>
+                                                <strong class="text-info">
+                                                    @if ((Model.Coupon?.Id ?? 0) > 0)
+                                                    {
+                                                        @WC.DiscountedPrice(Model.Coupon, Model.Total)
+
+                                                    }
+                                                    else
+
+                                                    {
+                                                        @Model.Total
+                                                    }
+
+                                                </strong>
+
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+
+                                @if (User.IsInRole(Relikt_2_Utility.WC.AdminRole) || User.IsInRole(Relikt_2_Utility.WC.CustomerRole))
+                                {
+                                    @*<div class="col-12">
+                                            <div class="wrapper">
+                                                <div class="checkout container">
+                                                    <div id="dropin-container"></div>
+                                                    <input id="nonce" name="payment_method_nonce" type="hidden" />
+                                                </div>
+                                            </div>
+
+                                        </div>*@
+
+                                    @*<div id="liqpay_checkout"></div>
+                                        <script>
+                                            window.LiqPayCheckoutCallback = function () {
+                                                LiqPayCheckout.init({
+                                                    data: "eyJwdWJsaWNfa2V5Ijoic2FuZGJveF9pMjc1NTQ5MjQ3MzIiLCJ2ZXJzaW9uIjoiMyIsImFjdGlvbiI6InBheSIsImFtb3VudCI6IjEwMDAiLCJjdXJyZW5jeSI6IlVBSCIsImRlc2NyaXB0aW9uIjoidGVzdCIsIm9yZGVyX2lkIjoiMDAwMDExIn0=",
+                                                    signature: "ha4JcRYZMu1jLmnYH8UHvB6pP6o=",
+                                                    embedTo: "#liqpay_checkout",
+                                                    mode: "embed" // embed || popup,
+                                                }).on("liqpay.callback", function (data) {
+                                                    console.log(data.status);
+                                                    console.log(data);
+                                                }).on("liqpay.ready", function (data) {
+                                                    // ready
+                                                }).on("liqpay.close", function (data) {
+                                                    // close
+                                                });
+                                            };
+                                        </script>
+                                        <script src="//static.liqpay.ua/libjs/checkout.js" async></script>*@
+
+
+
+                                }
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-12 col-md-5 offset-md-7">
+                            @if (User.IsInRole(Relikt_2_Utility.WC.AdminRole) || User.IsInRole(Relikt_2_Utility.WC.CustomerRole))
+                            {
+                                @*<a asp-action="ExcelDownload" asp-controller="Cart" class="btn btn-success">Сохранить заказ как Exel файл</a>*@
+                                <button asp-controller="Cart" asp-action="ExcelDownload" class="btn btn-info" onclick="return validateInput()" id="submit-button">Сохранить заказ как Exel файл</button>
+                                <br />
+                                <br />
+
+                                @*<button class="btn btn-success form-control" onclick="return validateInput()" id="submit-button">Сохранить заказ как Exel файл</button>*@
+                                <button class="btn btn-success form-control" onclick="return validateInput()" id="submit-button">Подтвердить Заказ</button>
+
+                            }
+                            else
+                            {
+
+                                @*<button type="submit" onclick="return validateInput()" class="btn btn-primary form-control">Отправить Запрос</button>*@
+                            }
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    @*<script src="https://js.braintreegateway.com/web/dropin/1.25.0/js/dropin.min.js"></script>*@
+    <script>
+        @*var client_token = "@ViewBag.ClientToken";
+        var form = document.querySelector('#payment-form');
+        braintree.dropin.create({
+            authorization: client_token,
+              container: '#dropin-container'
+            }, function (createErr, instance) {
+                    form.addEventListener('submit', function () {
+                        event.preventDefault();
+                        //Add the nonce to the form and submit
+                                instance.requestPaymentMethod(function (err, payload) {
+                                    // Submit payload.nonce to your server
+                                    document.querySelector('#nonce').value = payload.nonce;
+                                    form.submit();
+                });
+            });
+        });*@
+
+        function validateInput() {
+            var app_name = document.getElementById("ApplicationUser_FullName").value;
+            var app_phone = document.getElementById("ApplicationUser_PhoneNumber").value;
+            var app_email = document.getElementById("ApplicationUser_Email").value;
+            var app_streetaddress = document.getElementById("ApplicationUser_StreetAddress").value;
+            var app_city = document.getElementById("ApplicationUser_City").value;
+            var app_region = document.getElementById("ApplicationUser_Region").value;
+            var app_postalcode = document.getElementById("ApplicationUser_PostalCode").value;
+            if (app_name.toString() == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Пожалуйста введите полное имя!'
+                })
+                return false;
+            }
+            if (app_phone.toString() == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Пожалуйста введите номер телефона!'
+                })
+                return false;
+            }
+            if (app_email.toString() == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Пожалуйста введите Email!'
+                })
+                return false;
+            }
+            if (app_streetaddress.toString() == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops..',
+                    text: 'Пожалуйста введите улицу проживания или новой почты!'
+                })
+                return false;
+            }
+            if (app_city.toString() == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops..',
+                    text: 'Пожалуйста введите Город!'
+                })
+                return false;
+            }
+            if (app_region.toString() == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops..',
+                    text: 'Пожалуйста введите Область!'
+                })
+                return false;
+            }
+            if (app_postalcode.toString() == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops..',
+                    text: 'Пожалуйста введите номер дома или номер отделения новой почты!'
+                })
+                return false;
+            }
+            return true;
+        }
+    </script>
+}
+

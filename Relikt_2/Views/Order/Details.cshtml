@@ -1,0 +1,307 @@
+﻿@model Relikt_2_Models.ViewModels.OrderVM
+@using Relikt_2_Utility
+
+<form method="post">
+    <input asp-for="OrderHeader.Id" hidden />
+    <br />
+    <div class="backgroundWhite container">
+        <div class="card">
+            <div class="card-header bg-dark text-light ml-0 row container">
+                <div class="col-12 d-none d-md-block col-md-6 pb-1">
+                    <i class="fas fa-shopping-cart"></i> &nbsp; Детали Заказа
+
+                </div>
+
+                <div class="col-12 col-md-4 offset-md-2 text-right">
+                    <a asp-controller="Order" asp-action="Index" class="btn btn-outline-info form-control btn-sm">Возврат к Заказам</a>
+
+                </div>
+            </div>
+            <div class="card-body pb-0">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 pb-4">
+                            <div class="row">
+                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text-info">Детали Заказа:</span>
+
+                                </h4>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Имя</div>
+                                <div class="col-9">
+
+                                    <input asp-for="OrderHeader.FullName" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.FullName" class="text-danger"></span>
+
+
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Телефон</div>
+                                <div class="col-9">
+
+                                    <input asp-for="OrderHeader.PhoneNumber" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Улица</div>
+                                <div class="col-9">
+
+                                    <input asp-for="OrderHeader.StreetAddress" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.StreetAddress" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Город</div>
+                                <div class="col-9">
+
+                                    <input asp-for="OrderHeader.City" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.City" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Область</div>
+                                <div class="col-9">
+
+                                    <input asp-for="OrderHeader.Region" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.Region" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Номер дома, Новой Почты</div>
+                                <div class="col-9">
+
+                                    <input asp-for="OrderHeader.PostalCode" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.PostalCode" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Email</div>
+                                <div class="col-9">
+
+                                    <input asp-for="OrderHeader.Email" type="text" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.Email" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Дата Заказа</div>
+                                <div class="col-9">
+
+                                    <input value="@Html.DisplayFor(x=>x.OrderHeader.OrderDate)" type="text" class="form-control" readonly />
+
+                                </div>
+                            </div>
+
+                            <div class="row my-1">
+                                <div class="col-3">Дата готовности</div>
+                                <div class="col-9">
+                                    <input value="@Html.DisplayFor(x=>x.OrderHeader.ShippingDate)" id="shippingDate" type="text" readonly class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="row my-1">
+                                <div class="col-3">Дата отгрузки</div>
+                                <div class="col-9">
+                                    <input value="@Html.DisplayFor(x=>x.OrderHeader.CancellDate)" id="cancellDate" type="text" readonly class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="row my-1">
+                                <div class="col-3">ID Транзакции</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.TransactionId" type="text" readonly class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Статус Заказа</div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.OrderStatus" type="text" readonly class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Дополнительные инструкции</div>
+                                <div class="col-9">
+
+                                    @*<input asp-for="OrderHeader.Comments" type="text" class="form-control" />*@
+                                    <textarea asp-for="OrderHeader.Comments" style="height:100px;" class="form-control"></textarea>
+                                    <span asp-validation-for="OrderHeader.Comments" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-9 offset-3">
+                                    <input type="submit" value="Обновить детали заказа" class="btn btn-warning form-control"
+                                           asp-action="UpdateOrderDetails" formmethod="post" />
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-12 col-lg-5 offset-lg-1">
+                            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-info">Итог заказа</span>
+
+                            </h4>
+                            @*<a asp-action="ExcelDownload"
+                                class="btn btn-success">Сохранить заказ как Exel файл</a>*@
+                            @*<a href="/Relikt_2_Utility/ExcelDownload">Сохранить заказ как Exel файл</a>*@
+                            @*<input type="submit" value="Сохранить заказ как Exel файл" class="btn btn-info" />*@
+                            <ul class="list-group mb-3">
+                                @{ var orderTotal = 0.0;}
+                                @foreach (var detail in Model.OrderDetail)
+                                {
+
+                                    <li class="list-group-item d-flex justify-content-between p-2">
+                                        <div class="row container">
+                                            <div class="col-8">
+                                                <h6 class="my-0 text-info">@detail.Product.Name</h6>
+                                                @if (detail.Product.ApplicationType != null)
+                                                {
+                                                    <h6 class="my-0 text-info">@detail.Product.ApplicationType.Name</h6>
+                                                }
+                                                @if (detail.Product.Category != null)
+                                                {
+                                                    <h6 class="my-0 text-info">@detail.Product.Category.Name</h6>
+                                                }
+                                                @if (detail.Product.SizeType != null)
+                                                {
+                                                    <h6 class="my-0 text-info">@detail.Product.SizeType.Name</h6>
+                                                }
+
+                                                @if (detail.Product.ColourOfGlass != null)
+                                                {
+                                                    <h6 class="my-0 text-info">@detail.Product.ColourOfGlass?.Name</h6>
+                                                }
+                                                @if (detail.Product.RightLeft != null)
+                                                {
+                                                    <h6 class="my-0 text-info">@detail.Product.RightLeft?.Name</h6>
+                                                }
+
+                                                <small class="text-muted">Цена : @detail.PriceCount</small><br />
+                                                <small class="text-muted">Количество : @detail.UnitCount</small>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="text-success">@(detail.PriceCount * detail.UnitCount) грн.</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    orderTotal += detail.PriceCount * detail.UnitCount;
+                                }
+
+                                <li class="list-group-item d-flex justify-content-between bg-light">
+                                    <small class="text-info"> Сумма заказа </small>
+                                    <strong class="text-info">
+                                        @orderTotal  грн.
+
+                                    </strong>
+
+                                </li>
+
+                                @if (Model.Coupons != null)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div class="text-muted">
+                                            <h6 class="my-0">Скидка составила: </h6>
+
+                                        </div>
+
+
+                                        @*<span class="text-success"> @(Model.OrderHeader.CouponCodeDiscount) грн.</span>*@
+                                        @Html.DisplayFor(х => Model.OrderHeader.CouponCodeDiscount) грн.
+
+                                    </li>
+                                }
+                                <li class="list-group-item bg-info">
+                                    <div class="row container">
+                                        <div class="col-6">
+                                            <h5 class="text-white">ИТОГО </h5>
+                                        </div>
+
+                                        <div class="col-6 text-right">
+                                            <h5 class="text-white">@(Model.OrderHeader.FinalOrderTotal) грн.</h5>
+                                            
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+
+
+                            <br />
+
+                            @if (Model.OrderHeader.OrderStatus == Relikt_2_Utility.WC.StatusPending)
+                            {
+                                <input type="submit" value="Запуск в работу"
+                                       formmethod="post" asp-action="StartProcessing"
+                                       class="btn btn-info form-control" />
+                            }
+
+                            @if (Model.OrderHeader.OrderStatus == Relikt_2_Utility.WC.StatusInProcess)
+                            {
+                                <input type="submit" value="Готов"
+                                       formmethod="post" asp-action="ShipOrder"
+                                       class="btn btn-primary form-control" />
+                            }
+
+                            @if (Model.OrderHeader.OrderStatus == Relikt_2_Utility.WC.StatusShipped)
+                            {
+                                <input type="submit" value="Отгружен"
+                                       formmethod="post" asp-action="CancelOrder"
+                                       class="btn btn-primary form-control" />
+                            }
+                            @*@if (Model.OrderHeader.OrderStatus != Relikt_2_Utility.WC.StatusRefunded
+                                   && Model.OrderHeader.OrderStatus != Relikt_2_Utility.WC.StatusCancelled)
+                                {
+                                    <div class="pt-2">
+                                        <button type="submit"
+                                                class="btn btn-danger form-control"
+                                                asp-action="CancelOrder"
+                                                formmethod="post">
+                                            Заказ закрыт
+                                        </button>
+                                    </div>
+                                }*@
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            @Html.ActionLink("Сохранить заказ как Exel файл", "ExcelDownload", "Order", new { Model.OrderHeader.Id }, new { @class = "btn btn-success", id = "submit-button" })
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            var shippingDate = document.getElementById("shippingDate");
+
+            if (shippingDate.value == '01.01.0001  00:00') {
+                shippingDate.value = "";
+            }
+        })
+
+        $(document).ready(function () {
+            var cancellDate = document.getElementById("cancellDate");
+
+            if (cancellDate.value == '01.01.0001  00:00') {
+                cancellDate.value = "";
+            }
+        })
+    </script>
+
+} 

@@ -1,0 +1,242 @@
+﻿@model Relikt_2_Models.ViewModels.HomeVM
+@*@using ManualPaginApp.Helpers*@
+
+@*<script src="https://fast.wistia.com/embed/medias/zqzn6r4ezj.jsonp"  async></script>
+    <script src="https://fast.wistia.com/assets/external/E-v1.js" target="_blank" async></script><div class="wistia_responsive_padding" style="padding:62.5% 0 0 0;position:relative;"><div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><div class="wistia_embed wistia_async_zqzn6r4ezj videoFoam=true" style="height:100%;position:relative;width:100%"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/zqzn6r4ezj/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" /></div></div></div></div>*@
+<form>
+    @*<form action="https://www.privat24.ua/?x=47&y=35" target="_blank">*@
+    @*<script src="https://fast.wistia.com/assets/external/E-v1.js" target="_blank" async></script><div class="wistia_responsive_padding" style="padding:62.5% 0 0 0;position:relative;"><div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><div class="wistia_embed wistia_async_zqzn6r4ezj videoFoam=true" style="height:100%;position:relative;width:100%"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/zqzn6r4ezj/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" /></div></div></div></div>*@
+    @*<input type="image" src="//static.liqpay.ua/buttons/p1ru.radius.png" />*@
+    <input type="image" src="//encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoiMtJG_PC4lsb3-GZAiTZkUXAm3VlkJC1Ag&usqp=CAU" style="width:10%" />
+    <br />
+    ВНАЧАЛЕ ПРОСМОТРЕТЬ !!!
+</form>
+<div class="container">
+    <div class="text-center">
+        <button class="btn btn-dark filter-button" data-filter="all">Все Товары</button>
+
+        @foreach (var obj in Model.Categories)
+        {
+        <button class="btn btn-outline-secondary filter-button" data-property="@nameof(Product.CategoryId)" data-value="@obj.Id" data-filter="@obj.Name.Replace(' ','_')">
+            @obj.Name
+        </button>
+        }
+    </div>
+
+    <div class="text-center">
+
+        @foreach (var obj in Model.ApplicationTypes)
+        {
+        <button class="btn btn-outline-secondary filter-button" data-property="@nameof(Product.ApplicationTypeId)" data-value="@obj.Id" data-filter="@obj.Name.Replace(' ','_')">
+            @obj.Name
+        </button>
+        }
+    </div>
+
+    <div class="text-center">
+
+        @foreach (var obj in Model.SizeTypes)
+        {
+        <button class="btn btn-outline-secondary filter-button" data-property="@nameof(Product.SizeTypeId)" data-value="@obj.Id" data-filter="@obj.Name.Replace(' ','_')">
+            @obj.Name
+        </button>
+        }
+    </div>
+    <div class="text-center">
+
+        @foreach (var obj in Model.RightLefts)
+        {
+        <button class="btn btn-outline-secondary filter-button" data-property="@nameof(Product.RightLeftId)" data-value="@obj.Id" data-filter="@obj.Name.Replace(' ','_')">
+            @obj.Name
+        </button>}
+    </div>
+
+    <div class="text-center">
+
+        @foreach (var obj in Model.ColourOfGlasses)
+        {
+        <button class="btn btn-outline-secondary filter-button" data-property="@nameof(Product.ColourOfGlassId)" data-value="@obj.Id" data-filter="@obj.Name.Replace(' ','_')">
+            @obj.Name
+        </button>}
+    </div>
+    <br />
+    <div class="row">
+
+        @foreach (var prod in Model.ProductsPage.Items)
+        {
+        <partial name="_IndividualProductCard" model="prod" />
+            // Все Товары на экране
+
+        }
+    </div>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+
+            @for (int i = 1; i <= Model.ProductsPage.TotalPageCount; i++)
+            {
+
+            <li class="page-item @(i == Model.ProductsPage.Number ? "active" : "")">
+                @Html.ActionLink(i.ToString(), "Index", "Home", new { page = i }, new { @class = "page-link" })
+            </li>
+
+            }
+
+        </ul>
+    </nav>
+
+    @*@for (int i = 1; i <= Model.ProductsPage.TotalPageCount; i++)
+        {
+            <td>
+                @if (i != Model.ProductsPage.Number)
+                {
+                    <a href="javascript:PagerClick(@i);">@i</a>
+                }
+                else
+                {
+                    <span>@i</span>
+                }
+            </td>
+        }*@
+    @*<input type="hidden" id="hfCurrentPageIndex" name="currentPageIndex" />*@
+    @*@foreach (var item in Model.Products)
+        {
+            @Html.DisplayFor(modelItem => item.Name)
+        }*@
+    <br />
+    @*<div class="btn-group">
+            @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
+        </div>*@
+    @*<div>
+            <ul class="pagination">
+                @for (var i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                        <a asp-page="/pagination" asp-route-currentpage="@i" class="page-link">@i</a>
+                    </li>
+                }
+            </ul>
+        </div>*@
+</div>
+
+
+@section Scripts{
+    @*<script>
+            $(document).ready(function () {
+
+                $(".filter-button").click(function () {
+
+                    var value = $(this).attr('data-filter');
+                    if (value == "all") {
+                        $('.filter').show('1000');
+                    }
+                    else {
+                        $(".filter").not('.' + value).hide('3000');
+                        $('.filter').filter('.' + value).show('3000');
+
+                    }
+                });
+
+            });
+        </script>*@
+
+    <script>
+        //function PagerClick(index) {
+        //    document.getElementById("hfCurrentPageIndex").value = index;
+        //    document.forms[0].submit();
+        //}
+        //$(function () {
+        //    $(selector).pagination({
+        //        items: 100,
+        //        itemsOnPage: 1,
+        //        cssStyle: 'light-theme'
+        //    });
+        //    $(selector).pagination('selectPage', pageNumber);
+        //});
+        $('.filter-button.btn-outline-secondary').click(function () {
+            $(this).toggleClass('active');
+            const $activeFilterButtons = $('.filter-button.btn-outline-secondary.active');
+            let activeFilters
+            if ($activeFilterButtons.length > 0) {
+                activeFilters = $activeFilterButtons
+                    .map(() => {
+                        const element = $(this);
+
+                        return {
+                            property: element.data('property'),
+                            filter: element.data('filter'),
+                            value: element.data('value')
+                        };
+                    })
+                    .toArray();
+
+                /* $('div.filter').each(function () {
+                    const el = $(this);
+                    if (activeFilters.some(filter => el.hasClass(filter))) {
+                        el.css({ display: 'block' });
+                    } else {
+                        el.css({ display: 'none' });
+                    }
+                }); */
+            } else {
+                /* $('div.filter').each(function () {
+                    $(this).css({ display: 'block' });
+                });*/
+
+                activeFilters = [];
+            }
+
+            const url = new URL(window.location.href);
+            const search_params = url.searchParams;
+
+            // new value of "id" is set to "101"
+            search_params.set('filters', JSON.stringify(activeFilters));
+
+            // change the search property of the main url
+            url.search = search_params.toString();
+
+            // the new url string
+            var new_url = url.toString();
+            window.location.href = new_url;
+        });
+
+                                    //let filters = {};
+                                    //$('.filter').each(function () {
+                                    //    filters[$(this).attr('tag')] = $(this).attr('state');
+                                    //})
+
+                                    //$('.filter').click(function () {
+                                    //    let state = $(this).attr('state');
+
+                                    //    $(this).attr('state', state === 'off' ? 'on' : 'off');
+                                    //    filters[$(this).attr('tag')] = $(this).attr('state');
+                                    //    applyFilters();
+
+                                    //})
+
+                                    //function applyFilters() {
+                                    //    let anyFilterApplied = false;
+                                    //    for ([key, value] of Object.entries(filters)) {
+                                    //        if (value === 'on') {
+                                    //            anyFilterApplied = true;
+                                    //        }
+                                    //    }
+
+                                    //    if (!anyFilterApplied) {
+                                    //        return;
+                                    //    }
+
+                                    //    $('.items').hide();
+
+                                    //    $('.items span').each(function () {
+                                    //        let categories = $(this).attr('categories').split(',');
+                                    //        categories.forEach(function (category) {
+                                    //            if (filters[category] === 'on') {
+                                    //                $(this).fadeIn();
+                                    //            }
+                                    //        }.bind(this))
+                                    //    })
+                                    //}
+    </script>
+}
+

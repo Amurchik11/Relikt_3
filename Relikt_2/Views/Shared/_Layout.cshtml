@@ -1,0 +1,170 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@using Relikt_2_Utility
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Relikt</title>
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/fontawesome/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">-->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link href="~/FontAwesome/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <link rel='stylesheet' href='https://apimgmtstorelinmtekiynqw.blob.core.windows.net/content/MediaLibrary/Widget/Tracking/styles/tracking.css' />
+    @*<link type="text/css" rel="stylesheet" href="path_to/simplePagination.css" />*@
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3" style="background-color:#56645c;">
+            @if (HttpContextAccessor.HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart) != null)
+            {
+                <a asp-action="Index" asp-controller="Cart" class="nav-link h-100">
+                    @{
+                        var count = HttpContextAccessor.HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart).Count;
+                    }
+                    <i class="fas fa-shopping-cart h-100"></i> &nbsp; (@count)
+
+                </a>
+            }
+            else
+            {
+                <a href="#" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i> &nbsp; (0)
+
+                </a>
+            }
+            <div class="container">
+
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/Logotype_small.jpg" style="width:70%" />
+
+                </a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+
+
+                    <ul class="navbar-nav flex-grow-1">
+
+                        @*<li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" style="background-color:purple;">Магазин</a>
+                            </li>*@
+                        @if (User.IsInRole(WC.AdminRole))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Управление Контентом
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Category" asp-action="Index">Категория</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="ApplicationType" asp-action="Index">Тип Товара</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="SizeType" asp-action="Index">Размеры Товара</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="RightLeft" asp-action="Index">Правое Левое Открывание</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="ColourOfGlass" asp-action="Index">Цвет Стекла</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index">Товар</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Coupon" asp-action="Index">Купоны</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Создание Нового Администратора</a>
+
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Управление Предприятием
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @*<a class="dropdown-item" asp-area="" asp-controller="Inquiry" asp-action="Index">Запросы</a>*@
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Магазин</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Order" asp-action="Index">Заказы</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Планирование Производства</a>
+                                </div>
+                            </li>
+                        }
+                        <li>
+                            <div id="np-tracking" class="np-w-br-0 np-widget-hz" style="background-color: rgb(241, 241, 241);">
+                                <div id="np-first-state">
+                                    <div id="np-tracking-logo"></div> <div id="np-title">
+                                        <div class="np-h1">
+                                            <span class="np-h1-span1">ОТСЛЕЖИВАНИЕ</span> <br> <span class="np-h1-span2">ПОСЫЛОК</span>
+                                        </div>
+                                    </div>
+                                    <div id="np-input-container">
+                                        <div id="np-clear-input"></div>
+                                        <input id="np-user-input" type="text" name="number" placeholder="Номер посылки">
+                                    </div>
+                                    <div id="np-warning-message"></div>
+                                    <button id="np-submit-tracking" type="button" disabled="" style="background-color: rgb(209, 213, 218); border: 1px solid rgb(196, 196, 196);">
+                                        <span id="np-text-button-tracking">ОТСЛЕДИТЬ</span> <div id="np-load-image-tracking"></div>
+                                    </button> <div id="np-error-status"></div>
+                                    <a id="np-detail-cost" href="https://novaposhta.ua/delivery?utm_source=calc&amp;utm_medium=widget&amp;utm_term=calc&amp;utm_content=widget&amp;utm_campaign=NP" target="_blank">Расчет Стоимости Перевозки</a>
+                                </div>
+                                <div id="np-second-state">
+                                    <div id="np-status-icon"></div> <div id="np-status-message"></div> <div class="np-track-mini-logo">
+                                        <div class="np-line-right"></div> <div class="np-line-left"></div>
+                                    </div> <a href="#" id="np-more">Подробнее на сайте</a>
+                                    <div id="np-return-button"> <span id="np-return-button-span">Другая посылка</span> </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+
+                    </ul>
+                </div>
+            </div>
+
+        </nav>
+    </header>
+    <div class="container mb-4 pb-4">
+        <main role="main" class="pb-3">
+            <partial name="_Notifications" />
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer" style="background-color:#56645c;">
+        <div class="container text-white-50">
+            &copy; 2021 - Реликт Арте
+        </div>
+    </footer>
+    <!--<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>-->
+    @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>*@
+    <!--<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>-->
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+    <script type='text/javascript' id='track' charset='utf-8' data-lang='ua' apiKey='9a63bcec6e1658071d34bf7952ee2690' data-town='undefined' data-town-name='undefined' data-town-id='undefined' src='https://apimgmtstorelinmtekiynqw.blob.core.windows.net/content/MediaLibrary/Widget/Tracking/dist/track.min.js'></script>
+    @*<script type="text/javascript" src="path_to/jquery.js"></script>
+    <script type="text/javascript" src="path_to/jquery.simplePagination.js"></script>*@
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <ejs-scripts></ejs-scripts>
+</body>
+</html>

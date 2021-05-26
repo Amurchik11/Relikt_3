@@ -1,0 +1,195 @@
+﻿@model CartVM
+@using Relikt_2_Utility
+@using Relikt_2_Models.ViewModels
+@if (Model.Products.Count() > 0)
+{
+
+
+    <form method="post">
+        <br />
+        <div class="backgroundWhiteBorder">
+            <div class="container row">
+                <div class="col -8">
+                    <div class="card mt-4">
+                        <div class="card-header bg-dark text-light ml-0 row container">
+                            <div class="col-6">
+                                <i class="fa fa-shopping-cart"></i> &nbsp;
+                                Содержимое Корзины
+                            </div>
+                            <div class="col-6 text-right">
+                                <a asp-action="Clear" class="btn btn-outline-warning btn-sm">Очистить Корзину</a>
+                                <a asp-action="Index" asp-controller="Home" class="btn btn-outline-info btn-sm">Продолжение Покупок</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class=" d-none d-lg-block">
+                                <div class="row" style="color:#821f3d">
+                                    <div class="col-lg-2">
+                                    </div>
+                                    @if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.CustomerRole))
+                                    {
+                                        <div class="col-12 col-lg-3">
+                                            Детализация Товара
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-12 col-lg-7">
+                                            Детализация Товара
+                                        </div>
+                                    }
+
+                                    <div class="col-12 col-lg-2">
+                                        Цена за Единицу
+                                    </div>
+                                    @if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.CustomerRole))
+                                    {
+                                        <div class="col-6 col-lg-2">
+                                            Количество
+                                        </div>
+
+                                        <div class="col-6 col-lg-2">
+                                            Итоговая цена
+                                        </div>
+                                    }
+                                    <div class="col-6 col-sm-4 col-lg-1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr />
+                            @for (int i = 0; i < Model.Products.Count(); i++)
+                            {
+                                <input hidden asp-for="@Model.Products[i].Id" />
+                                <div class="row h-100">
+                                    <div class="col-4 col-md-2 text-center py-2">
+                                        <img src="@WC.ImagePath@Model.Products[i].Image" class="rounded" style="width:100%" />
+                                    </div>
+                                    @if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.CustomerRole))
+                                    {
+                                        <div class="col-8 col-lg-3">
+                                            <h7>@Model.Products[i].ApplicationType.Name</h7>
+                                            <h5>@Model.Products[i].Name</h5>
+                                            <h7>@Model.Products[i].Category.Name</h7>
+                                            <h7>@Model.Products[i].SizeType.Name</h7>
+                                            @if (@Model.Products[i].RightLeft != null)
+                                            {
+                                                <h7>@Model.Products[i].RightLeft?.Name</h7>
+                                            }
+                                            @if (@Model.Products[i].ColourOfGlass != null)
+                                            {
+                                                <h7>@Model.Products[i].ColourOfGlass?.Name</h7>
+                                            }
+
+                                            <div style="font-size:11px;">@Model.Products[i].ShortDesc</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+
+
+                                        <div class="col-8 col-lg-7">
+                                            <h7>@Model.Products[i].ApplicationType.Name</h7>
+                                            <h5>@Model.Products[i].Name</h5>
+                                            <h7>@Model.Products[i].Category.Name</h7>
+                                            <h7>@Model.Products[i].SizeType.Name</h7>
+                                            @if (@Model.Products[i].RightLeft != null)
+                                            {
+                                                <h7>@Model.Products[i].RightLeft?.Name</h7>
+                                            }
+                                            @if (@Model.Products[i].ColourOfGlass != null)
+                                            {
+                                                <h7>@Model.Products[i].ColourOfGlass?.Name</h7>
+                                            }
+
+
+                                            <div style="font-size:11px;">@Model.Products[i].ShortDesc</div>
+                                        </div>
+                                    }
+                                    <div class="col-3 col-lg-2 pt-lg-4" style="font-size:11px;">
+                                        <span style="font-size:17px;"> @Model.Products[i].Price грн.</span>
+
+                                    </div>
+                                    @if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.CustomerRole))
+                                    {
+                                        <div class="col-4 col-lg-2 pt-lg-4" style="font-size:11px;">
+                                            <input type="number" min="1" max="100000" asp-for="@Model.Products[i].TempCount" class="form-control" onchange="$('#UpdateCardInput').click();" />
+                                            <span asp-validation-for="@Model.Products[i].TempCount" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-3 col-lg-2 pt-lg-4" style="font-size:11px;">
+                                            <span style="font-size:17px;"> @(Model.Products[i].Price* Model.Products[i].TempCount) грн.</span>
+
+                                        </div>
+                                    }
+                                    <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
+                                        <a asp-action="Remove" asp-route-id="@Model.Products[i].Id" class="btn btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <hr />
+                            }
+
+                            @if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.CustomerRole))
+                            {
+
+                                <div class="col-12 text-right pr-4" style="color:#821f3d">
+                                    <div class="col-4">
+                                        <input id="txtCouponCode" asp-for="Coupon.Name" class="form-control" placeholder="Место кода-купона..." />
+                                    </div>
+                                    <div class="col-4" style="margin-top:2px;">
+                                        <input type="submit" asp-action="AddCoupon" formmethod="post" name="AddCoupon" value="Применить"
+                                               class="btn btn-info form-control" />
+                                        <button type="submit" class="btn btn-sm form-control btn-outline-danger" style="display:none" id="btnRemoveCoupon" asp-action="RemoveCoupon">
+                                            Удалить
+                                        </button>
+                                    </div>
+                                    Итоговая сумма:  <div id="totalSum">@string.Format("{0} грн.", Model.Coupon.Id > 0 ? WC.DiscountedPrice(Model.Coupon, Model.Total) : Model.Total)</div>
+                                </div>
+                            }
+
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-6 col-md-3 offset-md-6">
+                                    @if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.CustomerRole))
+                                    {
+                                        <input id="UpdateCardInput" type="submit" asp-action="UpdateCart" formmethod="post" name="Update" value="Обновить корзину"
+                                               class="btn btn-info form-control" />
+                                    }
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <button type="submit" class="btn btn-success form-control ">
+                                        <span>Продолжить</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <p>Добавьте Товар в Корзину, Пожалуйста...</p>
+}
+
+@section Scripts{
+    @*<partial name="_ValidationScriptsPartial" />*@
+    <script>
+        $(function () {
+            var couponCode = document.getElementById("txtCouponCode").value;
+            if (couponCode.length > 0) {
+                document.getElementById('btnCoupon').style.display = 'none';
+                document.getElementById('btnRemoveCoupon').style.display = '';
+            }
+            else {
+                document.getElementById('btnCoupon').style.display = '';
+                document.getElementById('btnRemoveCoupon').style.display = 'none';
+            }
+        });
+    </script>
+} 
